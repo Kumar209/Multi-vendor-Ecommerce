@@ -10,7 +10,7 @@ module.exports = (err, req, res, next) => {
     err = new ErrorHandler(message, 400);
   }
 
-  // Duplicate key error
+  // Duplicate key error or Like we have same email in database(email should be unqiue)
   if (err.code === 11000) {
     const message = `Duplicate key ${Object.keys(err.keyValue)} Entered`;
     err = new ErrorHandler(message, 400);
