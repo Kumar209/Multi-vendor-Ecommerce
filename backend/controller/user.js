@@ -3,15 +3,13 @@ const path = require("path");
 const User = require("../model/user");
 const router = express.Router();
 const { upload } = require("../multer");
-const ErrorHandler = require("../utils/ErrorHandler");
+// const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
-// const { isAuthenticated } = require("../middleware/auth");
-
-
+const { isAuthenticated } = require("../middleware/auth");
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
     try {
@@ -19,7 +17,6 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
         const userEmail = await User.findOne({ email });
 
         if (userEmail) {
-            //If user already exists then there is no need to store their image
             const filename = req.file.filename;
             const filePath = `uploads/${filename}`;
             fs.unlink(filePath, (err) => {
@@ -28,8 +25,10 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
                     res.status(500).json({ message: "Error deleting file" });
                 }
             });
-            return next(new ErrorHandler("User already exists", 404));
-        }
+            // return next(new ErrorHandler("User already exists", 400));
+            //Used this code because upper code is not working
+            return res.status(400).send("User already exists");
+        };
 
         const filename = req.file.filename;
         const fileUrl = path.join(filename);
@@ -38,10 +37,9 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
             name: name,
             email: email,
             password: password,
-            avatar: fileUrl
-        }
+            avatar: fileUrl,
+        };
 
-        //Email sending for User Registration
         const activationToken = createActivationToken(user);
 
         const activationUrl = `http://localhost:3000/activation/${activationToken}`;
@@ -50,32 +48,31 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
             await sendMail({
                 email: user.email,
                 subject: "Activate your account",
-                message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`
-            })
-
+                message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`,
+            });
             res.status(201).json({
                 success: true,
-                message: `Hello ${user.name} please check your email:- ${user.email} to activate your account!`
+                message: `please check your email:- ${user.email} to activate your account!`,
             });
-
         } catch (error) {
-            return next(new ErrorHandler(error.message, 500));
+            // return next(new ErrorHandler(error.message, 500));
+            return res.status(500).send(error.message);
         }
-    }
-    catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+    } catch (error) {
+        // return next(new ErrorHandler(error.message, 400));
+        return res.status(400).send("Internal server error in creating new User");
     }
 });
 
-//Create Activation Token
+
+// create activation token
 const createActivationToken = (user) => {
     return jwt.sign(user, process.env.ACTIVATION_SECRET, {
         expiresIn: "5m",
     });
 };
 
-
-//Activate User
+// activate user
 router.post("/activation", catchAsyncErrors(async (req, res, next) => {
     try {
         const { activation_token } = req.body;
@@ -86,14 +83,16 @@ router.post("/activation", catchAsyncErrors(async (req, res, next) => {
         );
 
         if (!newUser) {
-            return next(new ErrorHandler("Invalid token", 400));
+            // return next(new ErrorHandler("Invalid token", 400));
+            return res.status(500).send("Invalid Token");
         }
         const { name, email, password, avatar } = newUser;
 
         let user = await User.findOne({ email });
 
         if (user) {
-            return next(new ErrorHandler("User already exists", 400));
+            // return next(new ErrorHandler("User already exists", 400));
+            return res.status(400).send("User already exists");
         }
         user = await User.create({
             name,
@@ -104,9 +103,82 @@ router.post("/activation", catchAsyncErrors(async (req, res, next) => {
 
         sendToken(user, 201, res);
     } catch (error) {
-        return next(new ErrorHandler(error.message, 500));
+        // return next(new ErrorHandler(error.message, 500));
+        return res.status(500).send(error.message);
     }
 })
 );
+
+// login user
+router.post("/login-user", catchAsyncErrors(async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            // return next(new ErrorHandler("Please provide the all fields!", 400));
+            return res.status(400).send("Please provide the all fields!");
+        }
+
+        const user = await User.findOne({ email }).select("+password");
+
+        if (!user) {
+            // return next(new ErrorHandler("User doesn't exists!", 400));
+            return res.status(400).send("User doesn't exists!");
+        }
+
+        const isPasswordValid = await user.comparePassword(password);
+
+        if (!isPasswordValid) {
+            // return next(new ErrorHandler("Please provide the correct information", 400));
+            return res.status(400).send("Please provide the correct information");
+        }
+
+        sendToken(user, 201, res);
+    } catch (error) {
+        // return next(new ErrorHandler(error.message, 500));
+        return res.status(500).send("Internal server error in login");
+    }
+})
+);
+
+// load user
+router.get("/getuser", isAuthenticated, catchAsyncErrors(async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            // return next(new ErrorHandler("User doesn't exists", 400));
+            return res.status(400).send("User doesn't exists");
+        }
+
+        res.status(200).json({
+            success: true,
+            user,
+        });
+    } catch (error) {
+        // return next(new ErrorHandler(error.message, 500));
+        return res.status(500).send("Internal server error in get user");
+    }
+})
+);
+
+// log out user
+// router.get(
+//   "/logout",
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       res.cookie("token", null, {
+//         expires: new Date(Date.now()),
+//         httpOnly: true,
+//       });
+//       res.status(201).json({
+//         success: true,
+//         message: "Log out successful!",
+//       });
+//     } catch (error) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   })
+// );
 
 module.exports = router;
