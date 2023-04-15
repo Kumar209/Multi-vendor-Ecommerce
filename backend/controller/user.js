@@ -56,7 +56,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
             });
         } catch (error) {
             // return next(new ErrorHandler(error.message, 500));
-            return res.status(500).send(error.message);
+            return res.status(500).send("Internal Server error in Mail sending");
         }
     } catch (error) {
         // return next(new ErrorHandler(error.message, 400));
@@ -104,7 +104,7 @@ router.post("/activation", catchAsyncErrors(async (req, res, next) => {
         sendToken(user, 201, res);
     } catch (error) {
         // return next(new ErrorHandler(error.message, 500));
-        return res.status(500).send(error.message);
+        return res.status(500).send("Internal Server error in activation");
     }
 })
 );

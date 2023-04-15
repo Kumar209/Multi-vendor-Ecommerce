@@ -15,28 +15,30 @@ export const loadUser = () => async(dispatch) => {
     } catch (error) {
         dispatch({
             type: "LoadUserFail",
-            payload: error.response.data.message,
+            // payload: error.response.data.message,
+            payload: error.response.data,
         });
     }
 }
 
 // load seller
-export const loadSeller = () => async (dispatch) => {
-    try {
-      dispatch({
-        type: "LoadSellerRequest",
-      });
-      const { data } = await axios.get(`${server}/shop/getSeller`, {
-        withCredentials: true,
-      });
-      dispatch({
-        type: "LoadSellerSuccess",
-        payload: data.seller,
-      });
-    } catch (error) {
-      dispatch({
-        type: "LoadSellerFail",
-        payload: error.response.data.message,
-      });
-    }
-  };
+// export const loadSeller = () => async (dispatch) => {
+//     try {
+//       dispatch({
+//         type: "LoadSellerRequest",
+//       });
+//       const { data } = await axios.get(`${server}/shop/getSeller`, {
+//         withCredentials: true,
+//       });
+//       dispatch({
+//         type: "LoadSellerSuccess",
+//         payload: data.seller,
+//       });
+//     } catch (error) {
+//       dispatch({
+//         type: "LoadSellerFail",
+        // payload: error.response.data.message,
+        // payload: error.response.data,
+//       });
+//     }
+//   };

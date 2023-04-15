@@ -4,7 +4,7 @@ import { userReducer } from "./reducers/user.js"
 // import { productReducer } from "./reducers/product";
 // import { eventReducer } from "./reducers/event";
 
-
+// Combined all reducers in store it self
 const Store = configureStore({
   reducer: {
     user: userReducer,
