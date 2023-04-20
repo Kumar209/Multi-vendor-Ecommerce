@@ -15,7 +15,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
 import { loadUser } from "./redux/actions/user";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 // import Store from "./redux/store";
 // import { loadSeller, loadUser } from "./redux/actions/user";
@@ -26,15 +26,15 @@ import { loadUser } from "./redux/actions/user";
 // import { getAllEvents } from "./redux/actions/event";
 
 const App = () => {
-  // const { loading } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     Store.dispatch(loadUser());
   }, []);
 
   return (
-    // <>
-    //   {loading ? null : (
+    <>
+      {loading ? null : (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -63,8 +63,8 @@ const App = () => {
             theme="dark"
           />
         </BrowserRouter>
-    //   )}
-    // </>
+      )}
+    </>
   );
 };
 
