@@ -34,7 +34,7 @@ const App = () => {
 
   return (
     <>
-      {loading ? null : (
+       {loading ? null : (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -63,7 +63,7 @@ const App = () => {
             theme="dark"
           />
         </BrowserRouter>
-      )}
+       )}
     </>
   );
 };
