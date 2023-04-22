@@ -1,3 +1,5 @@
+// Used for Product card component in home page
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/style";
@@ -12,8 +14,8 @@ import {
 } from "react-icons/ai";
 
 const ProductCard = ({ data }) => {
-  const [click, setClick] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [click, setClick] = useState(false);   //used for wishlist heart toggle
+  const [open, setOpen] = useState(false);     //used to toggle product card details
 
   const d = data.name;
   const product_name = d.replace(/\s+/g, "-"); //replace space with -
