@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { backend_url } from "../../server";
 import { useSelector } from "react-redux";
-import { AiOutlineArrowRight, AiOutlineCamera } from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineCamera, AiOutlineDelete } from "react-icons/ai";
 import { DataGrid } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
 import styles from "../../styles/style";
@@ -102,6 +102,20 @@ const ProfileContent = ({ active }) => {
       {active === 5 && (
         <div>
           <TrackOrder />
+        </div>
+      )}
+
+      {/* Payment page  */}
+      {active === 6 && (
+        <div>
+          <PaymentMethod />
+        </div>
+      )}
+
+      {/* Address page  */}
+      {active === 7 && (
+        <div>
+          <PaymentMethod />
         </div>
       )}
     </div>
@@ -349,6 +363,40 @@ const TrackOrder =() => {
   return (
     <div className="pl-8 pt-1">
       <DataGrid rows={row} columns={columns} pageSize={10} disableSelectionOnClick autoHeight />
+    </div>
+  )
+}
+
+const PaymentMethod  =() => {
+  return (
+    <div className="w-full px-5">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
+          Payment Methods
+        </h1>
+        <div className={`${styles.button} !rounded-md`}>
+          <span className="text-[#fff]">Add New</span>
+        </div>
+      </div>
+      
+      <br />
+
+      <div className="w-full bg-white h-[70px] rounded-[4px] flex items-center px-3 shadow justify-between pr-10">
+        <div className="flex items-center">
+          <img src="https://bonik-react.vercel.app/assets/images/payment-methods/Visa.svg" alt="" />
+          <h5 className="pl-5 font-[600]">Prashant Kumar</h5>
+        </div>
+
+        <div className="pl-8 flex items-center">
+          <h6>1234 **** **** ****</h6>
+          <h5 className="pl-6">08/2024</h5>
+        </div>
+
+        <div className="min-w-[10%] flex items-center justify-between pl-8">
+          <AiOutlineDelete size={25} className="cursor-pointer" />
+        </div>
+      </div>
+
     </div>
   )
 }
