@@ -1,5 +1,7 @@
 node_modules
 fontend/node_modules
+
+backend/config/env
 # Logs
 logs
 *.log

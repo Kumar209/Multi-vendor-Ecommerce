@@ -304,7 +304,10 @@ const Header = ({ activeHeading }) => {
               <Navbar active={activeHeading} />
 
               <div className={`${styles.button} ml-4 !rounded-[4px]`}>
-                <Link to="/seller" className="text-[#fff] flex items-center">
+                <Link
+                  to="/shop-create"
+                  className="text-[#fff] flex items-center"
+                >
                   <h1>
                     Become Seller <IoIosArrowForward className="ml-1" />
                   </h1>

@@ -12,6 +12,8 @@ import {
   FAQPage,
   ProductDetailsPage,
   ProfilePage,
+  CheckoutPage,
+  ShopCreatePage
 } from "./Routes.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,7 +31,7 @@ import ProtectedRoute from "./ProtectedRoute";
 // import { getAllEvents } from "./redux/actions/event";
 
 const App = () => {
-  const { loading , isAuthenticated } = useSelector((state) => state.user);
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
     Store.dispatch(loadUser());
@@ -37,23 +39,31 @@ const App = () => {
 
   return (
     <>
-       {loading ? null : (
+      {loading ? null : (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/sign-up" element={<SignupPage />} />
-            <Route path="/activation/:activation_token" element={<ActivationPage />} />
+            <Route
+              path="/activation/:activation_token"
+              element={<ActivationPage />}
+            />
             <Route path="/products" element={<ProductPage />} />
             <Route path="/product/:name" element={<ProductDetailsPage />} />
             <Route path="/best-selling" element={<BestSellingPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/faq" element={<FAQPage />} />
-            <Route path="/profile" element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <ProfilePage />
-              </ProtectedRoute>
-            } />
+            <Route path="/checkout" element={<ProtectedRoute isAuthenticated={{isAuthenticated}}> <CheckoutPage /> </ProtectedRoute>} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/shop-create" element={<ShopCreatePage />} />
           </Routes>
 
           <ToastContainer
@@ -69,7 +79,7 @@ const App = () => {
             theme="dark"
           />
         </BrowserRouter>
-       )}
+      )}
     </>
   );
 };
