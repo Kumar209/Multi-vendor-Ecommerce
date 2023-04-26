@@ -1,5 +1,4 @@
 import React from "react";
-
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/style";
@@ -25,7 +24,7 @@ const ShopCreate = () => {
     e.preventDefault();
     // const config = { headers: { "Content-Type": "multipart/form-data" } };
 
-    // const newForm = new FormData();
+    const newForm = new FormData();
 
     // newForm.append("file", avatar);
     // newForm.append("name", name);
