@@ -4,7 +4,7 @@ const router = express.Router();
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
-// const sendToken = require("../utils/jwtToken");
+const sendToken = require("../utils/jwtToken");
 const Shop = require("../model/shop");
 // const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
 const { upload } = require("../multer");
@@ -47,7 +47,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
 
     const activationToken = createActivationToken(seller);
 
-    const activationUrl = `https://localhost:3000/seller/activation/${activationToken}`;
+    const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
 
     try {
       await sendMail({
