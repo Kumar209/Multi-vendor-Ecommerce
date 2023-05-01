@@ -26,28 +26,28 @@ const ShopCreate = () => {
 
     const newForm = new FormData();
 
-    // newForm.append("file", avatar);
-    // newForm.append("name", name);
-    // newForm.append("email", email);
-    // newForm.append("password", password);
-    // newForm.append("zipCode", zipCode);
-    // newForm.append("address", address);
-    // newForm.append("phoneNumber", phoneNumber);
-    // axios
-    //   .post(`${server}/shop/create-shop`, newForm, config)
-    //   .then((res) => {
-    //     toast.success(res.data.message);
-    //     setName("");
-    //     setEmail("");
-    //     setPassword("");
-    //     setAvatar();
-    //     setZipCode();
-    //     setAddress("");
-    //     setPhoneNumber();
-    //   })
-    //   .catch((error) => {
-    //     toast.error(error.response.data.message);
-    //   });
+    newForm.append("file", avatar);
+    newForm.append("name", name);
+    newForm.append("email", email);
+    newForm.append("password", password);
+    newForm.append("zipCode", zipCode);
+    newForm.append("address", address);
+    newForm.append("phoneNumber", phoneNumber);
+    axios
+      .post(`${server}/shop/create-shop`, newForm, config)
+      .then((res) => {
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setAvatar();
+        setZipCode();
+        setAddress("");
+        setPhoneNumber();
+      })
+      .catch((error) => {
+        toast.error(error.response.data);
+      });
   };
 
   const handleFileInputChange = (e) => {

@@ -10,7 +10,7 @@ import ProductDetailsPage  from "../src/pages/ProductDetailsPage.jsx";
 import ProfilePage from "../src/pages/ProfilePage.jsx";
 import CheckoutPage from "../src/pages/CheckoutPage.jsx";
 import ShopCreatePage from "../src/pages/ShopCreate.jsx";
-
+import SellerActivationPage from "../src/pages/SellerActivationPage.jsx";
 
 export {
     LoginPage,
@@ -25,4 +25,5 @@ export {
     ProfilePage,
     CheckoutPage,
     ShopCreatePage,
+    SellerActivationPage,
 }
