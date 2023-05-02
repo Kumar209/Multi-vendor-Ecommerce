@@ -7,6 +7,7 @@ const sendMail = require("../utils/sendMail");
 // const sendToken = require("../utils/jwtToken");
 const Shop = require("../model/shop");
 // const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
+const { isSeller } = require("../middleware/auth");
 const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendShopToken = require("../utils/shopToken");
@@ -163,26 +164,28 @@ router.post(
 );
 
 // load shop
-// router.get(
-//   "/getSeller",
-//   isSeller,
-//   catchAsyncErrors(async (req, res, next) => {
-//     try {
-//       const seller = await Shop.findById(req.seller._id);
+router.get(
+  "/getSeller",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const seller = await Shop.findById(req.seller._id);
 
-//       if (!seller) {
-//         return next(new ErrorHandler("User doesn't exists", 400));
-//       }
+      if (!seller) {
+        // return next(new ErrorHandler("User doesn't exists", 400));
+        return res.status(400).send("User doesn't exists");
+      }
 
-//       res.status(200).json({
-//         success: true,
-//         seller,
-//       });
-//     } catch (error) {
-//       return next(new ErrorHandler(error.message, 500));
-//     }
-//   })
-// );
+      res.status(200).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      // return next(new ErrorHandler(error.message, 500));
+      return res.status(500).send("Internal Server Error");
+    }
+  })
+);
 
 // log out from shop
 // router.get(
