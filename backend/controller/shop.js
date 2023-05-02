@@ -4,12 +4,12 @@ const router = express.Router();
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
-const sendToken = require("../utils/jwtToken");
+// const sendToken = require("../utils/jwtToken");
 const Shop = require("../model/shop");
 // const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
 const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-// const sendShopToken = require("../utils/shopToken");
+const sendShopToken = require("../utils/shopToken");
 
 // const ErrorHandler = require("../utils/ErrorHandler");
 
@@ -84,7 +84,7 @@ const createActivationToken = (seller) => {
 
 // activate user
 router.post(
-  "/shop/activation",
+  "/activation",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { activation_token } = req.body;
@@ -100,6 +100,8 @@ router.post(
       }
       const { name, email, password, avatar, zipCode, address, phoneNumber } =
         newSeller;
+
+      console.log({name, email, password, avatar, zipCode, address, phoneNumber});
 
       let seller = await Shop.findOne({ email });
 
@@ -121,42 +123,44 @@ router.post(
       sendShopToken(seller, 201, res);
     } catch (error) {
     //   return next(new ErrorHandler(error.message, 500));
-    return res.status(500).send(error.message);
+    return res.status(500).send("Internal Server Error");
     }
   })
 );
 
 // login shop
-// router.post(
-//   "/login-shop",
-//   catchAsyncErrors(async (req, res, next) => {
-//     try {
-//       const { email, password } = req.body;
+router.post(
+  "/login-shop",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
 
-//       if (!email || !password) {
-//         return next(new ErrorHandler("Please provide the all fields!", 400));
-//       }
+      if (!email || !password) {
+        // return next(new ErrorHandler("Please provide the all fields!", 400));
+        return res.status(400).send("Please provide the all fields!");
+      }
 
-//       const user = await Shop.findOne({ email }).select("+password");
+      const user = await Shop.findOne({ email }).select("+password");
 
-//       if (!user) {
-//         return next(new ErrorHandler("User doesn't exists!", 400));
-//       }
+      if (!user) {
+        // return next(new ErrorHandler("User doesn't exists!", 400));
+        return res.status(400).send("User doesn't exists!");
+      }
 
-//       const isPasswordValid = await user.comparePassword(password);
+      const isPasswordValid = await user.comparePassword(password);
 
-//       if (!isPasswordValid) {
-//         return next(
-//           new ErrorHandler("Please provide the correct information", 400)
-//         );
-//       }
+      if (!isPasswordValid) {
+        // return next(new ErrorHandler("Please provide the correct information", 400));
+        return res.status(400).send("Please provide the correct information");
+      }
 
-//       sendShopToken(user, 201, res);
-//     } catch (error) {
-//       return next(new ErrorHandler(error.message, 500));
-//     }
-//   })
-// );
+      sendShopToken(user, 201, res);
+    } catch (error) {
+      // return next(new ErrorHandler(error.message, 500));
+      return res.status(500).send("Internal Server Error");
+    }
+  })
+);
 
 // load shop
 // router.get(
