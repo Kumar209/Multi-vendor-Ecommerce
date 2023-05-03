@@ -4,6 +4,10 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import styles from '../../styles/style';
 import { Link } from 'react-router-dom';
+// import { backend_url } from "../../server";
+// import { useDispatch, useSelector } from "react-redux";
+// import { addTocart, removeFromCart } from "../../redux/actions/cart";
+// import { toast } from "react-toastify";
 
 const Cart = ({setOpenCart}) => {
     const cartData = [

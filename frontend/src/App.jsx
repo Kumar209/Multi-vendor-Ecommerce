@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
@@ -10,45 +11,38 @@ import {
   BestSellingPage,
   EventsPage,
   FAQPage,
+  CheckoutPage,
+  PaymentPage,
+  OrderSuccessPage,
   ProductDetailsPage,
   ProfilePage,
-  CheckoutPage,
   ShopCreatePage,
   SellerActivationPage,
   ShopLoginPage
-} from "./Routes.jsx";
+} from "./routes/Routes.jsx";
+import { ShopDashboardPage } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
-import { useSelector } from "react-redux";
-import ProtectedRoute from "./ProtectedRoute";
-import SellerProtectedRoute from "./SellerProtectedRoute";
-
 import { loadSeller, loadUser } from "./redux/actions/user";
-// import ProtectedRoute from "./routes/ProtectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import { ShopHomePage } from "./ShopRoutes.jsx";
-// import SellerProtectedRoute from "./routes/SellerProtectedRoute";
+import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 // import { getAllProducts } from "./redux/actions/product";
 // import { getAllEvents } from "./redux/actions/event";
 
 const App = () => {
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
-  const { isLoading, isSeller } = useSelector((state) => state.seller);
-
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
-
-    if(isSeller === true){
-      return <Navigate to="/shop" replace />
-    }
   }, []);
 
   return (
-    <>
-      {loading || isLoading ? null : (
+    // <>
+    //   {loading || isLoading ? null : (
         <BrowserRouter>
           <Routes>
+            <Route path="/payment" element={ <ProtectedRoute> <PaymentPage /> </ProtectedRoute> } />
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/sign-up" element={<SignupPage />} />
@@ -64,12 +58,13 @@ const App = () => {
             <Route path="/product/:name" element={<ProductDetailsPage />} />
             <Route path="/best-selling" element={<BestSellingPage />} />
             <Route path="/events" element={<EventsPage />} />
-            <Route path="/faq" element={<FAQPage />} />
-            <Route path="/checkout" element={<ProtectedRoute isAuthenticated={{isAuthenticated}}> <CheckoutPage /> </ProtectedRoute>} />
+            <Route path="/faq" element={<FAQPage />} />            
+            <Route path="/checkout" element={<ProtectedRoute> <CheckoutPage /> </ProtectedRoute>} />
+            <Route path="/order/success" element={<OrderSuccessPage />} />
             <Route
               path="/profile"
               element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <ProtectedRoute>
                   <ProfilePage />
                 </ProtectedRoute>
               }
@@ -79,11 +74,15 @@ const App = () => {
             <Route path="/shop-create" element={<ShopCreatePage />} />
             <Route path="/shop-login" element={<ShopLoginPage />} />
             <Route path="/shop/:id" element={
-              <SellerProtectedRoute isSeller={isSeller}>
+              <SellerProtectedRoute>
                 <ShopHomePage />
               </SellerProtectedRoute>
             } />
-
+            <Route path="/dashboard" element={
+              <SellerProtectedRoute>
+                <ShopDashboardPage />
+              </SellerProtectedRoute>
+            } />
             
           </Routes>
 
@@ -101,8 +100,8 @@ const App = () => {
           />
         </BrowserRouter>
       )}
-    </>
-  );
-};
+//     </>
+//   );
+// };
 
 export default App;
