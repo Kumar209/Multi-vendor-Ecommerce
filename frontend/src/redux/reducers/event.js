@@ -4,60 +4,60 @@ const initialState = {
   isLoading: true,
 };
 
-export const productReducer = createReducer(initialState, {
-  productCreateRequest: (state) => {
+export const eventReducer = createReducer(initialState, {
+  eventCreateRequest: (state) => {
     state.isLoading = true;
   },
-  productCreateSuccess: (state, action) => {
+  eventCreateSuccess: (state, action) => {
     state.isLoading = false;
-    state.product = action.payload;
+    state.event = action.payload;
     state.success = true;
   },
-  productCreateFail: (state, action) => {
+  eventCreateFail: (state, action) => {
     state.isLoading = false;
     state.error = action.payload;
     state.success = false;
   },
 
-  // get all products of shop
-  getAllProductsShopRequest: (state) => {
+  // get all events of shop
+  getAlleventsShopRequest: (state) => {
     state.isLoading = true;
   },
-  getAllProductsShopSuccess: (state, action) => {
+  getAlleventsShopSuccess: (state, action) => {
     state.isLoading = false;
-    state.products = action.payload;
+    state.events = action.payload;
   },
-  getAllProductsShopFailed: (state, action) => {
+  getAlleventsShopFailed: (state, action) => {
     state.isLoading = false;
     state.error = action.payload;
   },
 
-  // delete product of a shop
-  deleteProductRequest: (state) => {
+  // delete event of a shop
+  deleteeventRequest: (state) => {
     state.isLoading = true;
   },
-  deleteProductSuccess: (state, action) => {
+  deleteeventSuccess: (state, action) => {
     state.isLoading = false;
     state.message = action.payload;
   },
-  deleteProductFailed: (state, action) => {
+  deleteeventFailed: (state, action) => {
     state.isLoading = false;
     state.error = action.payload;
   },
 
-  // get all products
-//   getAllProductsRequest: (state) => {
+  // get all events 
+//   getAlleventsRequest: (state) => {
 //     state.isLoading = true;
 //   },
-//   getAllProductsSuccess: (state, action) => {
+//   getAlleventsSuccess: (state, action) => {
 //     state.isLoading = false;
-//     state.allProducts = action.payload;
+//     state.allEvents = action.payload;
 //   },
-//   getAllProductsFailed: (state, action) => {
+//   getAlleventsFailed: (state, action) => {
 //     state.isLoading = false;
 //     state.error = action.payload;
 //   },
-  
+
   clearErrors: (state) => {
     state.error = null;
   },

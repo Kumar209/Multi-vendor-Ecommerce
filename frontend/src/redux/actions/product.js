@@ -17,9 +17,7 @@ export const createProduct = (newForm) => async (dispatch) => {
       config,
     );
 
-   
-
-    console.log(data);
+    // console.log(data);
 
     dispatch({
       type: "productCreateSuccess",
@@ -35,52 +33,54 @@ export const createProduct = (newForm) => async (dispatch) => {
 };
 
 // get All Products of a shop
-// export const getAllProductsShop = (id) => async (dispatch) => {
-//   try {
-//     dispatch({
-//       type: "getAllProductsShopRequest",
-//     });
+export const getAllProductsShop = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllProductsShopRequest",
+    });
 
-//     const { data } = await axios.get(
-//       `${server}/product/get-all-products-shop/${id}`
-//     );
-//     dispatch({
-//       type: "getAllProductsShopSuccess",
-//       payload: data.products,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: "getAllProductsShopFailed",
-//       payload: error.response.data.message,
-//     });
-//   }
-// };
+    const { data } = await axios.get(
+      `${server}/product/get-all-products-shop/${id}`
+    );
+    dispatch({
+      type: "getAllProductsShopSuccess",
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllProductsShopFailed",
+      // payload: error.response.data.message,
+      payload: error.response.data,
+    });
+  }
+};
 
 // delete product of a shop
-// export const deleteProduct = (id) => async (dispatch) => {
-//   try {
-//     dispatch({
-//       type: "deleteProductRequest",
-//     });
+export const deleteProduct = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "deleteProductRequest",
+    });
 
-//     const { data } = await axios.delete(
-//       `${server}/product/delete-shop-product/${id}`,
-//       {
-//         withCredentials: true,
-//       }
-//     );
+    const { data } = await axios.delete(
+      `${server}/product/delete-shop-product/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
 
-//     dispatch({
-//       type: "deleteProductSuccess",
-//       payload: data.message,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: "deleteProductFailed",
-//       payload: error.response.data.message,
-//     });
-//   }
-// };
+    dispatch({
+      type: "deleteProductSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "deleteProductFailed",
+      // payload: error.response.data.message,
+      payload: error.response.data,
+    });
+  }
+};
 
 // get all products
 // export const getAllProducts = () => async (dispatch) => {
